@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  rag-service:
+    build:
+      context: ./rag-service
+      dockerfile: Dockerfile
+    container_name: finintel-rag-service
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - EMBEDDING_MODEL=text-embedding-3-small
+      - CHUNK_SIZE=800
+      - CHUNK_OVERLAP=150
+    volumes:
+      - ./rag-service/app/data:/app/app/data
+    restart: unless-stopped
+    networks:
+      - finintel-network
+
+  gateway-service:
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    container_name: finintel-gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - rag-service
+    restart: unless-stopped
+    networks:
+      - finintel-network
+
+  web-ui:
+    build:
+      context: ./web-ui
+      dockerfile: Dockerfile
+    container_name: finintel-web-ui
+    ports:
+      - "3000:80"
+    depends_on:
+      - rag-service
+      - gateway-service
+    restart: unless-stopped
+    networks:
+      - finintel-network
+
+networks:
+  finintel-network:
+    driver: bridge

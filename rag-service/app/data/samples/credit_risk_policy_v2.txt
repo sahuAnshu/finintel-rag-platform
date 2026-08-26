@@ -1,0 +1,16 @@
+# Voya Financial & SkyReserve — Enterprise Credit Risk & Compliance Policy (v2.4)
+
+## Scope & Objective
+This regulatory policy establishes standardized risk management protocols, role-based authorization matrices, and audit requirements for all financial settlement, refund, and credit underwriting operations.
+
+## Transaction Risk Categorization
+Transactions are dynamically classified using an automated ML/heuristic scoring model (Index 0 to 100):
+- Low Risk (0 - 30): Automatic straight-through processing.
+- Medium Risk (31 - 70): Standard gateway review with 2FA verification.
+- High Risk (71 - 100): Mandatory quarantine under FLAGGED_FOR_REVIEW status.
+
+## Role-Based Authorization & Refund Thresholds
+In adherence with financial governance frameworks:
+1. Standard Refunds (Under ₹50,000): Can be authorized by Branch Managers or Level-2 Analysts.
+2. High-Value Refunds (Exceeding ₹50,000): Requires dual-key authorization by a certified Compliance Officer or System Administrator.
+3. Manual Flag Override: Permitted exclusively for Admin roles with mandatory tamper-evident audit logging.
