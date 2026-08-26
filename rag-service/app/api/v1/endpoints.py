@@ -1,6 +1,6 @@
 import uuid
 from typing import List
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Depends, Header
 from app.schemas.rag_schemas import (
     QueryRequest, QueryResponse, DocumentIngestRequest,
@@ -64,7 +64,7 @@ async def ingest_document(request: DocumentIngestRequest):
             category=request.category,
             chunk_count=len(chunks),
             character_count=len(request.content),
-            created_at=datetime.utcnow()
+            created_at=datetime.now(timezone.utc)
         )
         documents_registry.insert(0, summary)
         
@@ -96,7 +96,7 @@ async def health_check():
     return {
         "status": "HEALTHY",
         "service": "FinIntel RAG Engine",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "vector_index_ready": len(vector_store.vectors) > 0,
         "total_indexed_chunks": len(vector_store.vectors)
     }
